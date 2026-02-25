@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Trader Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta http-equiv="refresh" content="10"> </head>
+<body class="bg-light">
+    <div class="container py-5">
+        <h1 class="mb-4">AI Trader Dashboard</h1>
+        
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">총 자산</div>
+                    <div class="card-body"><h3 class="card-title">{{ "{:,.0f}".format(status.total_asset) }}원</h3></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header">수익률</div>
+                    <div class="card-body"><h3 class="card-title">{{ status.total_roi }}%</h3></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-dark bg-warning mb-3">
+                    <div class="card-header">예수금 (현금)</div>
+                    <div class="card-body"><h3 class="card-title">{{ "{:,.0f}".format(status.balance) }}원</h3></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">현재 보유 종목</div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>종목명</th>
+                            <th>수량</th>
+                            <th>평단가</th>
+                            <th>현재가</th>
+                            <th>평가금액</th>
+                            <th>수익률</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in status.holdings %}
+                        <tr>
+                            <td>{{ item.name }} ({{ item.ticker }})</td>
+                            <td>{{ item.qty }}</td>
+                            <td>{{ "{:,.0f}".format(item.avg_price) }}</td>
+                            <td>{{ "{:,.0f}".format(item.current_price) }}</td>
+                            <td>{{ "{:,.0f}".format(item.valuation) }}</td>
+                            <td class="{{ 'text-danger' if item.roi < 0 else 'text-success' }}">
+                                {{ item.roi }}%
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
