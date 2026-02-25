@@ -51,3 +51,13 @@ def sell(req: TradeRequest):
 def api_status():
     if not env: return {"status": "error", "msg": "서버 설정 오류"}
     return env.get_status()
+
+@app.post("/api/reload")
+def reload_data():
+    """구글 시트 내용을 강제로 다시 읽어와서 동기화"""
+    if not env: return {"status": "error"}
+    
+    # 시트에서 다시 읽어오기 실행
+    env._reconstruct_portfolio()
+    
+    return {"status": "success", "msg": "구글 시트와 동기화 완료!"}
